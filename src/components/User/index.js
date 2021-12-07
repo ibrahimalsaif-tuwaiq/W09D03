@@ -36,6 +36,7 @@ const User = () => {
       );
       dispatch(getUserTodosHelper(res.data));
     } catch (error) {
+      dispatch(getUserTodosHelper([]));
       console.log(error);
     }
   };

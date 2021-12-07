@@ -39,7 +39,7 @@ export default Todos;
 export const getTodosHelper = (data) => {
   return {
     type: "GET_TODOS",
-    payload: data,
+    payload: { todos: data },
   };
 };
 

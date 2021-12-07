@@ -31,6 +31,7 @@ const Dashboard = () => {
       });
       dispatch(getUsersHelper(res.data));
     } catch (error) {
+      dispatch(getUsersHelper([]));
       console.log(error);
     }
   };

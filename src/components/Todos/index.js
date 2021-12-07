@@ -35,8 +35,9 @@ const Todos = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      dispatch(getTodosHelper({ todos: res.data }));
+      dispatch(getTodosHelper(res.data));
     } catch (error) {
+      dispatch(getTodosHelper([]));
       console.log(error);
     }
   };
@@ -92,11 +93,14 @@ const Todos = () => {
 
   const deleteTodo = async (id) => {
     try {
-      const res = await axios.delete(`${process.env.REACT_APP_BASE_URL}/todos/${id}`, {
-        headers: {
-          Authorization: `Bearer ${state.token}`,
-        },
-      });
+      const res = await axios.delete(
+        `${process.env.REACT_APP_BASE_URL}/todos/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        }
+      );
       dispatch(deleteTodoHelper(res.data));
     } catch (error) {
       console.log(error);
@@ -117,10 +121,17 @@ const Todos = () => {
             <div>
               <input
                 className="addInput"
+                id="addTodo"
                 onChange={(e) => setTodo(e.target.value)}
                 placeholder="Add a new todo"
               />
-              <button className="add" onClick={addTodo}>
+              <button
+                className="add"
+                onClick={() => {
+                  addTodo();
+                  document.getElementById("addTodo").value = "";
+                }}
+              >
                 ADD
               </button>
             </div>
