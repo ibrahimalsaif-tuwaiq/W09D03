@@ -1,13 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { userLogin } from "./../../reducers/Login";
 import "./style.css";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
+  const state = useSelector((state) => {
+    return {
+      token: state.Login.token,
+    };
+  });
 
   const login = async () => {
     try {
@@ -15,7 +24,9 @@ const Login = () => {
         email,
         password,
       });
-      //
+      dispatch(
+        userLogin({ role: res.data.result.role.role, token: res.data.token })
+      );
       navigate("/");
     } catch (error) {
       setMessage(error.response.data.message);
@@ -24,7 +35,7 @@ const Login = () => {
 
   return (
     <div className="wrapper">
-      {!token ? (
+      {!state.token ? (
         <div className="formCon">
           <h1>Login</h1>
           {message ? <div className="message">{message}</div> : ""}
