@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 const Signup = () => {
@@ -7,6 +8,12 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
+  const state = useSelector((state) => {
+    return {
+      token: state.Login.token,
+    };
+  });
 
   const signup = async () => {
     try {
@@ -23,7 +30,7 @@ const Signup = () => {
 
   return (
     <div className="wrapper">
-      {!token ? (
+      {!state.token ? (
         <div className="formCon">
           <h1>Signup</h1>
           {message ? <div className="message">{message}</div> : ""}
