@@ -1,14 +1,24 @@
 import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { getUsersHelper, deleteUserHelper } from "./../../reducers/Dashboard";
 import Navbar from "./../Navbar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const state = useSelector((state) => {
+    return {
+      token: state.Login.token,
+      users: state.Dashboard.users,
+    };
+  });
 
   useEffect(() => {
-    getUsers(/**/);
+    getUsers(state.token);
     // eslint-disable-next-line
   }, []);
 
@@ -19,7 +29,7 @@ const Dashboard = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      // 
+      dispatch(getUsersHelper(res.data));
     } catch (error) {
       console.log(error);
     }
@@ -38,12 +48,12 @@ const Dashboard = () => {
       reverseButtons: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await axios.delete(`${process.env.REACT_APP_BASE_URL}/users/${id}`, {
+        const res = await axios.delete(`${process.env.REACT_APP_BASE_URL}/users/${id}`, {
           headers: {
             Authorization: `Bearer ${state.token}`,
           },
         });
-        getUsers(state.token);
+        dispatch(deleteUserHelper(res.data.userId));
         Swal.fire({
           title: "Deleted!",
           text: "The user has been deleted",
@@ -66,16 +76,16 @@ const Dashboard = () => {
     <>
       <Navbar page="Dashboard" />
       <div className="wrapper">
-        {!token ? (
+        {!state.token ? (
           <h1>
             You are not logeddin yet, so <Link to="/login">login</Link> or
             <Link to="/signup">signup</Link>
           </h1>
         ) : (
           <div className="ItemsCon">
-            {users ? (
+            {state.users ? (
               <ul className="list">
-                {users.map((user) => (
+                {state.users.map((user) => (
                   <div key={user._id} className="listItem">
                     <li>{user.email}</li>
                     <div>
