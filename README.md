@@ -78,6 +78,10 @@ npm start
 - Dashboard
 - User
 
+## UML Diagram
+
+![UML digram](https://github.com/ibrahimalsaif-tuwaiq/W09D03/blob/main/public/digrams/todos%20with%20redux%20frontend%20UML.jpg?raw=true)
+
 ## Design
 
 ### Color palette
